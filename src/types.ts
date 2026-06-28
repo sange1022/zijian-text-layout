@@ -40,3 +40,8 @@ export type FontPreset = {
   fallback: string
   usage: string
 }
+
+export type BackgroundImageValue = {
+  url: string
+  name: string
+}
