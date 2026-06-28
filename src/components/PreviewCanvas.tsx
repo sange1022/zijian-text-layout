@@ -1,9 +1,24 @@
-import { forwardRef, useEffect, useRef, useState } from 'react'
+import { forwardRef, useEffect, useRef, useState, type CSSProperties } from 'react'
 import { FONT_BY_ID, SIZE_BY_ID } from '../data/presets'
-import type { EditorState } from '../types'
+import type { EditorState, SignaturePosition } from '../types'
 
 type PreviewCanvasProps = {
   state: EditorState
+}
+
+function getSignaturePositionStyle(position: SignaturePosition): CSSProperties {
+  const isTop = position.startsWith('top-')
+  const textAlign = position.endsWith('-left')
+    ? 'left'
+    : position.endsWith('-right')
+      ? 'right'
+      : 'center'
+
+  return {
+    top: isTop ? '6%' : undefined,
+    bottom: isTop ? undefined : '6%',
+    textAlign,
+  }
 }
 
 export const PreviewCanvas = forwardRef<HTMLDivElement, PreviewCanvasProps>(function PreviewCanvas(
@@ -82,7 +97,7 @@ export const PreviewCanvas = forwardRef<HTMLDivElement, PreviewCanvasProps>(func
               className="preview-signature"
               data-testid="preview-signature"
               style={{
-                bottom: '6%',
+                ...getSignaturePositionStyle(state.signaturePosition),
                 color: state.bodyStyle.color,
                 fontFamily: `'${bodyFont.family}', ${bodyFont.fallback}`,
                 fontSize: Math.max(14, state.bodyStyle.fontSize * 0.72),

@@ -52,14 +52,22 @@ it('disables export when both text fields are empty', async () => {
   expect(screen.getByText('请输入文字内容')).toBeInTheDocument()
 })
 
-it('renders a signature at a fixed position near the canvas bottom', async () => {
+it.each([
+  { label: '左上', expectedStyle: { top: '6%', textAlign: 'left' } },
+  { label: '上中', expectedStyle: { top: '6%', textAlign: 'center' } },
+  { label: '右上', expectedStyle: { top: '6%', textAlign: 'right' } },
+  { label: '左下', expectedStyle: { bottom: '6%', textAlign: 'left' } },
+  { label: '下中', expectedStyle: { bottom: '6%', textAlign: 'center' } },
+  { label: '右下', expectedStyle: { bottom: '6%', textAlign: 'right' } },
+])('moves the signature to $label', async ({ label, expectedStyle }) => {
   const user = userEvent.setup()
   render(<App />)
 
   await user.type(screen.getByLabelText('署名文字'), '摄影 / 林野')
+  await user.click(screen.getByRole('button', { name: label }))
 
   expect(screen.getByTestId('preview-signature')).toHaveTextContent('摄影 / 林野')
-  expect(screen.getByTestId('preview-signature')).toHaveStyle({ bottom: '6%' })
+  expect(screen.getByTestId('preview-signature')).toHaveStyle(expectedStyle)
 })
 
 it('allows export when only the signature has content', async () => {
