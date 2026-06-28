@@ -5,10 +5,19 @@ export type TextStyle = {
   color: string
 }
 
+export type SignaturePosition =
+  | 'top-left'
+  | 'top-center'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-center'
+  | 'bottom-right'
+
 export type EditorState = {
   title: string
   body: string
   signature: string
+  signaturePosition: SignaturePosition
   titleStyle: TextStyle
   bodyStyle: TextStyle
   backgroundColor: string

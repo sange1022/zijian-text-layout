@@ -1,5 +1,5 @@
 import { FONT_BY_ID, SIZE_BY_ID } from '../data/presets'
-import type { EditorState, TextStyle } from '../types'
+import type { EditorState, SignaturePosition, TextStyle } from '../types'
 
 export const STORAGE_KEY = 'zijian-editor-state-v1'
 
@@ -7,6 +7,7 @@ export const DEFAULT_EDITOR_STATE: EditorState = {
   title: '留一点空白，\n给生活呼吸',
   body: '好的排版让文字慢下来。标题负责建立节奏，正文留出足够的行间距，让每一句话都被看见。',
   signature: '',
+  signaturePosition: 'bottom-left',
   titleStyle: {
     fontId: 'source-serif',
     fontSize: 64,
@@ -24,6 +25,14 @@ export const DEFAULT_EDITOR_STATE: EditorState = {
 }
 
 const HEX_COLOR = /^#[0-9a-fA-F]{6}$/
+const SIGNATURE_POSITIONS = new Set([
+  'top-left',
+  'top-center',
+  'top-right',
+  'bottom-left',
+  'bottom-center',
+  'bottom-right',
+])
 
 function clamp(value: number, min: number, max: number) {
   return Math.min(max, Math.max(min, value))
@@ -46,6 +55,10 @@ function isTextStyle(value: unknown): value is TextStyle {
   )
 }
 
+function isSignaturePosition(value: unknown): value is SignaturePosition {
+  return typeof value === 'string' && SIGNATURE_POSITIONS.has(value)
+}
+
 function isEditorState(value: unknown): value is EditorState {
   if (!value || typeof value !== 'object') return false
   const state = value as Record<string, unknown>
@@ -53,6 +66,7 @@ function isEditorState(value: unknown): value is EditorState {
     typeof state.title === 'string' &&
     typeof state.body === 'string' &&
     typeof state.signature === 'string' &&
+    isSignaturePosition(state.signaturePosition) &&
     isTextStyle(state.titleStyle) &&
     isTextStyle(state.bodyStyle) &&
     typeof state.backgroundColor === 'string' &&
@@ -67,8 +81,14 @@ export function parseStoredState(raw: string | null): EditorState {
   try {
     const value: unknown = JSON.parse(raw)
     const candidate =
-      value && typeof value === 'object' && !('signature' in value)
-        ? { ...value, signature: '' }
+      value && typeof value === 'object'
+        ? {
+            ...value,
+            ...(!('signature' in value) ? { signature: '' } : {}),
+            ...(!('signaturePosition' in value)
+              ? { signaturePosition: 'bottom-left' as const }
+              : {}),
+          }
         : value
     if (!isEditorState(candidate)) return DEFAULT_EDITOR_STATE
     return {

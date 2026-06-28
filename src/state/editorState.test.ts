@@ -51,6 +51,26 @@ describe('parseStoredState', () => {
     expect(parseStoredState(JSON.stringify(saved))).toEqual(saved)
   })
 
+  it('adds the default signature position to a valid legacy state', () => {
+    const legacy = { ...DEFAULT_EDITOR_STATE } as Record<string, unknown>
+    delete legacy.signaturePosition
+
+    expect(parseStoredState(JSON.stringify(legacy))).toEqual({
+      ...legacy,
+      signaturePosition: 'bottom-left',
+    })
+  })
+
+  it('restores a valid signature position', () => {
+    const saved = { ...DEFAULT_EDITOR_STATE, signaturePosition: 'top-center' as const }
+    expect(parseStoredState(JSON.stringify(saved))).toEqual(saved)
+  })
+
+  it('rejects an unknown signature position', () => {
+    const saved = { ...DEFAULT_EDITOR_STATE, signaturePosition: 'middle' }
+    expect(parseStoredState(JSON.stringify(saved))).toEqual(DEFAULT_EDITOR_STATE)
+  })
+
   it('clamps legacy font sizes to the slider ranges', () => {
     const saved = {
       ...DEFAULT_EDITOR_STATE,
