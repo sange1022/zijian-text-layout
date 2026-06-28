@@ -1,15 +1,12 @@
 import { FONT_PRESETS } from '../data/presets'
 import type { TextStyle } from '../types'
 import { ColorField } from './ColorField'
+import { FontSizeSlider } from './FontSizeSlider'
 
 type TextStyleControlsProps = {
   name: '标题' | '正文'
   value: TextStyle
   onChange: (value: TextStyle) => void
-}
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(max, Math.max(min, value))
 }
 
 export function TextStyleControls({ name, value, onChange }: TextStyleControlsProps) {
@@ -34,17 +31,6 @@ export function TextStyleControls({ name, value, onChange }: TextStyleControlsPr
       </label>
       <div className="control-row">
         <label className="field-control">
-          <span>{name}字号</span>
-          <input
-            aria-label={`${name}字号`}
-            type="number"
-            min="12"
-            max="240"
-            value={value.fontSize}
-            onChange={(event) => update({ fontSize: clamp(Number(event.target.value), 12, 240) })}
-          />
-        </label>
-        <label className="field-control">
           <span>{name}粗细</span>
           <select
             aria-label={`${name}粗细`}
@@ -57,6 +43,13 @@ export function TextStyleControls({ name, value, onChange }: TextStyleControlsPr
           </select>
         </label>
       </div>
+      <FontSizeSlider
+        label={`${name}字号`}
+        value={value.fontSize}
+        min={name === '标题' ? 24 : 12}
+        max={name === '标题' ? 160 : 80}
+        onChange={(fontSize) => update({ fontSize })}
+      />
       <ColorField label={`${name}颜色`} value={value.color} onChange={(color) => update({ color })} />
     </fieldset>
   )

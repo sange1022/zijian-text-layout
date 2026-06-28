@@ -30,7 +30,7 @@ it('updates title typography independently', async () => {
   render(<App />)
 
   await user.selectOptions(screen.getByLabelText('标题字体'), 'smiley')
-  fireEvent.change(screen.getByLabelText('标题字号'), { target: { value: '80' } })
+  fireEvent.change(screen.getByRole('slider', { name: '标题字号' }), { target: { value: '80' } })
   fireEvent.change(screen.getByLabelText('标题颜色'), { target: { value: '#ff0000' } })
 
   expect(screen.getByTestId('preview-title')).toHaveStyle({
