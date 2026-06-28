@@ -67,7 +67,7 @@ button { color: inherit; }
 
 .editor-panel {
   overflow-y: auto;
-  padding: 4px 18px 16px;
+  padding: 4px 18px 9px;
   background: var(--white);
   border-right: 1px solid var(--line);
   scrollbar-width: thin;
@@ -493,6 +493,7 @@ button:focus-visible {
 }
 
 .background-section { position: relative; border-bottom: 0; }
+.background-section .settings-heading { margin-bottom: 1px; }
 
 .preview-stage {
   position: relative;
