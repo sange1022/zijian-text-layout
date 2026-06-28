@@ -7,3 +7,11 @@
   font-style: normal;
   font-weight: 400 900;
 }
+
+@font-face {
+  font-family: 'Huiwen Mincho';
+  src: local('Huiwen-mincho'), local('汇文明朝体');
+  font-display: swap;
+  font-style: normal;
+  font-weight: 400;
+}

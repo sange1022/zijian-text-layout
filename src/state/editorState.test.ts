@@ -8,6 +8,7 @@ describe('editor presets', () => {
       '思源宋体',
       '思源黑体',
       '得意黑',
+      '汇文明朝体',
     ])
   })
 
@@ -64,6 +65,26 @@ describe('parseStoredState', () => {
   it('restores a valid signature position', () => {
     const saved = { ...DEFAULT_EDITOR_STATE, signaturePosition: 'top-center' as const }
     expect(parseStoredState(JSON.stringify(saved))).toEqual(saved)
+  })
+
+  it('uses the saved body font when migrating a legacy signature font', () => {
+    const legacy = { ...DEFAULT_EDITOR_STATE } as Record<string, unknown>
+    delete legacy.signatureFontId
+
+    expect(parseStoredState(JSON.stringify(legacy))).toEqual({
+      ...legacy,
+      signatureFontId: DEFAULT_EDITOR_STATE.bodyStyle.fontId,
+    })
+  })
+
+  it('restores an independent signature font', () => {
+    const saved = { ...DEFAULT_EDITOR_STATE, signatureFontId: 'huiwen-mincho' }
+    expect(parseStoredState(JSON.stringify(saved))).toEqual(saved)
+  })
+
+  it('rejects an unknown signature font', () => {
+    const saved = { ...DEFAULT_EDITOR_STATE, signatureFontId: 'unknown-font' }
+    expect(parseStoredState(JSON.stringify(saved))).toEqual(DEFAULT_EDITOR_STATE)
   })
 
   it('rejects an unknown signature position', () => {

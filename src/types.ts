@@ -18,6 +18,7 @@ export type EditorState = {
   body: string
   signature: string
   signaturePosition: SignaturePosition
+  signatureFontId: string
   titleStyle: TextStyle
   bodyStyle: TextStyle
   backgroundColor: string

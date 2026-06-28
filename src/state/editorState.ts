@@ -8,6 +8,7 @@ export const DEFAULT_EDITOR_STATE: EditorState = {
   body: '好的排版让文字慢下来。标题负责建立节奏，正文留出足够的行间距，让每一句话都被看见。',
   signature: '',
   signaturePosition: 'bottom-left',
+  signatureFontId: 'source-sans',
   titleStyle: {
     fontId: 'source-serif',
     fontSize: 64,
@@ -67,6 +68,8 @@ function isEditorState(value: unknown): value is EditorState {
     typeof state.body === 'string' &&
     typeof state.signature === 'string' &&
     isSignaturePosition(state.signaturePosition) &&
+    typeof state.signatureFontId === 'string' &&
+    FONT_BY_ID.has(state.signatureFontId) &&
     isTextStyle(state.titleStyle) &&
     isTextStyle(state.bodyStyle) &&
     typeof state.backgroundColor === 'string' &&
@@ -87,6 +90,14 @@ export function parseStoredState(raw: string | null): EditorState {
             ...(!('signature' in value) ? { signature: '' } : {}),
             ...(!('signaturePosition' in value)
               ? { signaturePosition: 'bottom-left' as const }
+              : {}),
+            ...(!('signatureFontId' in value) &&
+              'bodyStyle' in value &&
+              value.bodyStyle &&
+              typeof value.bodyStyle === 'object' &&
+              'fontId' in value.bodyStyle &&
+              typeof value.bodyStyle.fontId === 'string'
+              ? { signatureFontId: value.bodyStyle.fontId }
               : {}),
           }
         : value

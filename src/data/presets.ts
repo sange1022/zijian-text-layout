@@ -22,6 +22,13 @@ export const FONT_PRESETS: FontPreset[] = [
     fallback: 'PingFang SC, Microsoft YaHei, sans-serif',
     usage: '醒目 · 标题',
   },
+  {
+    id: 'huiwen-mincho',
+    label: '汇文明朝体',
+    family: 'Huiwen Mincho',
+    fallback: 'Songti SC, STSong, serif',
+    usage: '复古 · 海报',
+  },
 ]
 
 export const SIZE_PRESETS: SizePreset[] = [
