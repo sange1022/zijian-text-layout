@@ -25,6 +25,10 @@ export const DEFAULT_EDITOR_STATE: EditorState = {
 
 const HEX_COLOR = /^#[0-9a-fA-F]{6}$/
 
+function clamp(value: number, min: number, max: number) {
+  return Math.min(max, Math.max(min, value))
+}
+
 function isTextStyle(value: unknown): value is TextStyle {
   if (!value || typeof value !== 'object') return false
   const style = value as Record<string, unknown>
@@ -66,7 +70,18 @@ export function parseStoredState(raw: string | null): EditorState {
       value && typeof value === 'object' && !('signature' in value)
         ? { ...value, signature: '' }
         : value
-    return isEditorState(candidate) ? candidate : DEFAULT_EDITOR_STATE
+    if (!isEditorState(candidate)) return DEFAULT_EDITOR_STATE
+    return {
+      ...candidate,
+      titleStyle: {
+        ...candidate.titleStyle,
+        fontSize: clamp(candidate.titleStyle.fontSize, 24, 160),
+      },
+      bodyStyle: {
+        ...candidate.bodyStyle,
+        fontSize: clamp(candidate.bodyStyle.fontSize, 12, 80),
+      },
+    }
   } catch {
     return DEFAULT_EDITOR_STATE
   }

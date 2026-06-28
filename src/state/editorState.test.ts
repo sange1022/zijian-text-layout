@@ -50,4 +50,17 @@ describe('parseStoredState', () => {
     const saved = { ...DEFAULT_EDITOR_STATE, signature: '摄影 / 林野' }
     expect(parseStoredState(JSON.stringify(saved))).toEqual(saved)
   })
+
+  it('clamps legacy font sizes to the slider ranges', () => {
+    const saved = {
+      ...DEFAULT_EDITOR_STATE,
+      titleStyle: { ...DEFAULT_EDITOR_STATE.titleStyle, fontSize: 200 },
+      bodyStyle: { ...DEFAULT_EDITOR_STATE.bodyStyle, fontSize: 120 },
+    }
+
+    expect(parseStoredState(JSON.stringify(saved))).toMatchObject({
+      titleStyle: { fontSize: 160 },
+      bodyStyle: { fontSize: 80 },
+    })
+  })
 })
