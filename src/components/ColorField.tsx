@@ -7,6 +7,12 @@ type ColorFieldProps = {
 const HEX_COLOR = /^#[0-9a-fA-F]{6}$/
 
 export function ColorField({ label, value, onChange }: ColorFieldProps) {
+  const [draft, setDraft] = useState(value.toUpperCase())
+
+  useEffect(() => {
+    setDraft(value.toUpperCase())
+  }, [value])
+
   return (
     <div className="color-field">
       <label className="control-label">
@@ -16,18 +22,28 @@ export function ColorField({ label, value, onChange }: ColorFieldProps) {
           className="color-picker"
           type="color"
           value={value}
-          onChange={(event) => onChange(event.target.value.toUpperCase())}
+          onChange={(event) => {
+            const next = event.target.value.toUpperCase()
+            setDraft(next)
+            onChange(next)
+          }}
         />
       </label>
       <input
         aria-label={`${label} HEX`}
         className="hex-input"
-        value={value.toUpperCase()}
+        value={draft}
         maxLength={7}
         onChange={(event) => {
-          if (HEX_COLOR.test(event.target.value)) onChange(event.target.value.toUpperCase())
+          const next = event.target.value.toUpperCase()
+          setDraft(next)
+          if (HEX_COLOR.test(next)) onChange(next)
+        }}
+        onBlur={() => {
+          if (!HEX_COLOR.test(draft)) setDraft(value.toUpperCase())
         }}
       />
     </div>
   )
 }
+import { useEffect, useState } from 'react'
