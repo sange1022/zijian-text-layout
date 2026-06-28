@@ -35,4 +35,19 @@ describe('parseStoredState', () => {
     const saved = { ...DEFAULT_EDITOR_STATE, title: '新的标题', sizeId: 'square' }
     expect(parseStoredState(JSON.stringify(saved))).toEqual(saved)
   })
+
+  it('adds an empty signature to a valid legacy state', () => {
+    const legacy = { ...DEFAULT_EDITOR_STATE } as Record<string, unknown>
+    delete legacy.signature
+
+    expect(parseStoredState(JSON.stringify(legacy))).toEqual({
+      ...legacy,
+      signature: '',
+    })
+  })
+
+  it('restores a signature in the current state', () => {
+    const saved = { ...DEFAULT_EDITOR_STATE, signature: '摄影 / 林野' }
+    expect(parseStoredState(JSON.stringify(saved))).toEqual(saved)
+  })
 })

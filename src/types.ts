@@ -8,6 +8,7 @@ export type TextStyle = {
 export type EditorState = {
   title: string
   body: string
+  signature: string
   titleStyle: TextStyle
   bodyStyle: TextStyle
   backgroundColor: string
