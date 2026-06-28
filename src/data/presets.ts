@@ -4,14 +4,14 @@ export const FONT_PRESETS: FontPreset[] = [
   {
     id: 'source-serif',
     label: '思源宋体',
-    family: 'Source Han Serif SC',
+    family: 'Noto Serif SC',
     fallback: 'Songti SC, STSong, serif',
     usage: '文艺 · 正文',
   },
   {
     id: 'source-sans',
     label: '思源黑体',
-    family: 'Source Han Sans SC',
+    family: 'Noto Sans SC',
     fallback: 'PingFang SC, Microsoft YaHei, sans-serif',
     usage: '清晰 · 通用',
   },
