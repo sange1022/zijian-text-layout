@@ -12,7 +12,7 @@ export function PosterColorPalette({ onSelect }: PosterColorPaletteProps) {
   const activeCategory = POSTER_COLOR_CATEGORIES.find(({ id }) => id === activeId) ?? POSTER_COLOR_CATEGORIES[0]
 
   return (
-    <div className="poster-palette">
+    <div className={`poster-palette${isOpen ? ' is-open' : ''}`}>
       <button
         type="button"
         className="palette-toggle"

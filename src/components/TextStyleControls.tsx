@@ -15,21 +15,21 @@ export function TextStyleControls({ name, value, onChange }: TextStyleControlsPr
   return (
     <fieldset className="settings-section style-controls">
       <legend>{name}样式</legend>
-      <label className="field-control field-control--wide">
-        <span>{name}字体</span>
-        <select
-          aria-label={`${name}字体`}
-          value={value.fontId}
-          onChange={(event) => update({ fontId: event.target.value })}
-        >
-          {FONT_PRESETS.map((font) => (
-            <option key={font.id} value={font.id}>
-              {font.label} · {font.usage}
-            </option>
-          ))}
-        </select>
-      </label>
-      <div className="control-row">
+      <div className="control-row control-row--font">
+        <label className="field-control">
+          <span>{name}字体</span>
+          <select
+            aria-label={`${name}字体`}
+            value={value.fontId}
+            onChange={(event) => update({ fontId: event.target.value })}
+          >
+            {FONT_PRESETS.map((font) => (
+              <option key={font.id} value={font.id}>
+                {font.label} · {font.usage}
+              </option>
+            ))}
+          </select>
+        </label>
         <label className="field-control">
           <span>{name}粗细</span>
           <select

@@ -11,10 +11,7 @@ export function FontSizeSlider({ label, value, min, max, onChange }: FontSizeSli
 
   return (
     <label className="font-size-slider">
-      <span className="slider-heading">
-        <span>{label}</span>
-        <output>{value} px</output>
-      </span>
+      <span>{label}</span>
       <input
         aria-label={label}
         type="range"
@@ -24,6 +21,7 @@ export function FontSizeSlider({ label, value, min, max, onChange }: FontSizeSli
         style={{ '--range-progress': `${progress}%` } as React.CSSProperties}
         onChange={(event) => onChange(Number(event.target.value))}
       />
+      <output>{value} px</output>
     </label>
   )
 }
