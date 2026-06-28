@@ -1,0 +1,57 @@
+import type { EditorState } from '../types'
+import { ColorField } from './ColorField'
+import { SizePresets } from './SizePresets'
+import { TextStyleControls } from './TextStyleControls'
+
+type EditorPanelProps = {
+  state: EditorState
+  onChange: (patch: Partial<EditorState>) => void
+}
+
+export function EditorPanel({ state, onChange }: EditorPanelProps) {
+  return (
+    <aside className="editor-panel" aria-label="排版设置">
+      <fieldset className="settings-section content-fields">
+        <legend>文字内容</legend>
+        <label className="field-control">
+          <span>标题</span>
+          <textarea
+            aria-label="标题内容"
+            rows={3}
+            value={state.title}
+            onChange={(event) => onChange({ title: event.target.value })}
+          />
+        </label>
+        <label className="field-control">
+          <span>正文</span>
+          <textarea
+            aria-label="正文内容"
+            rows={4}
+            value={state.body}
+            onChange={(event) => onChange({ body: event.target.value })}
+          />
+        </label>
+      </fieldset>
+
+      <TextStyleControls
+        name="标题"
+        value={state.titleStyle}
+        onChange={(titleStyle) => onChange({ titleStyle })}
+      />
+      <TextStyleControls
+        name="正文"
+        value={state.bodyStyle}
+        onChange={(bodyStyle) => onChange({ bodyStyle })}
+      />
+      <SizePresets value={state.sizeId} onChange={(sizeId) => onChange({ sizeId })} />
+      <fieldset className="settings-section background-section">
+        <legend>画布背景</legend>
+        <ColorField
+          label="背景颜色"
+          value={state.backgroundColor}
+          onChange={(backgroundColor) => onChange({ backgroundColor })}
+        />
+      </fieldset>
+    </aside>
+  )
+}

@@ -1,0 +1,87 @@
+import { forwardRef, useEffect, useRef, useState } from 'react'
+import { FONT_BY_ID, SIZE_BY_ID } from '../data/presets'
+import type { EditorState } from '../types'
+
+type PreviewCanvasProps = {
+  state: EditorState
+}
+
+export const PreviewCanvas = forwardRef<HTMLDivElement, PreviewCanvasProps>(function PreviewCanvas(
+  { state },
+  forwardedRef,
+) {
+  const stageRef = useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(0.4)
+  const size = SIZE_BY_ID.get(state.sizeId)!
+  const titleFont = FONT_BY_ID.get(state.titleStyle.fontId)!
+  const bodyFont = FONT_BY_ID.get(state.bodyStyle.fontId)!
+
+  useEffect(() => {
+    const stage = stageRef.current
+    if (!stage || typeof ResizeObserver === 'undefined') return
+    const updateScale = () => {
+      const horizontal = Math.max(stage.clientWidth - 64, 240) / size.width
+      const vertical = Math.max(stage.clientHeight - 64, 280) / size.height
+      setScale(Math.min(horizontal, vertical, 0.72))
+    }
+    updateScale()
+    const observer = new ResizeObserver(updateScale)
+    observer.observe(stage)
+    return () => observer.disconnect()
+  }, [size.height, size.width])
+
+  return (
+    <section className="preview-stage" aria-label="排版预览" ref={stageRef}>
+      <div
+        className="preview-sizer"
+        style={{ width: size.width * scale, height: size.height * scale }}
+      >
+        <div
+          ref={forwardedRef}
+          className="preview-canvas"
+          data-testid="preview-canvas"
+          data-export-canvas="true"
+          data-size={`${size.width}x${size.height}`}
+          style={{
+            width: size.width,
+            height: size.height,
+            backgroundColor: state.backgroundColor,
+            transform: `scale(${scale})`,
+          }}
+        >
+          <div className="preview-content">
+            {state.title ? (
+              <h2
+                data-testid="preview-title"
+                style={{
+                  color: state.titleStyle.color,
+                  fontFamily: `'${titleFont.family}', ${titleFont.fallback}`,
+                  fontSize: state.titleStyle.fontSize,
+                  fontWeight: state.titleStyle.fontWeight,
+                }}
+              >
+                {state.title}
+              </h2>
+            ) : null}
+            {state.body ? (
+              <p
+                data-testid="preview-body"
+                style={{
+                  color: state.bodyStyle.color,
+                  fontFamily: `'${bodyFont.family}', ${bodyFont.fallback}`,
+                  fontSize: state.bodyStyle.fontSize,
+                  fontWeight: state.bodyStyle.fontWeight,
+                }}
+              >
+                {state.body}
+              </p>
+            ) : null}
+          </div>
+        </div>
+      </div>
+      <div className="preview-meta" aria-hidden="true">
+        {size.label} · {size.detail}
+      </div>
+    </section>
+  )
+})
