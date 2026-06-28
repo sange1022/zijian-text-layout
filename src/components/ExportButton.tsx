@@ -23,7 +23,7 @@ export function ExportButton({ isEmpty, onExport }: ExportButtonProps) {
 
   return (
     <div className="export-area">
-      {isEmpty ? <span className="empty-hint">请输入标题或正文</span> : null}
+      {isEmpty ? <span className="empty-hint">请输入文字内容</span> : null}
       {error ? <span className="export-error" role="alert">{error}</span> : null}
       <button
         type="button"

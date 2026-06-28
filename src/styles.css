@@ -109,6 +109,7 @@ button { color: inherit; }
 textarea,
 select,
 input[type='number'],
+input[type='text'],
 .hex-input {
   width: 100%;
   border: 1px solid #d8d8d8;
@@ -128,6 +129,7 @@ textarea {
 
 select,
 input[type='number'],
+input[type='text'],
 .hex-input {
   height: 40px;
   padding: 0 10px;
@@ -138,6 +140,7 @@ select { cursor: pointer; }
 textarea:hover,
 select:hover,
 input[type='number']:hover,
+input[type='text']:hover,
 .hex-input:hover { background: #fff; border-color: #bdbdbd; }
 
 textarea:focus-visible,
@@ -393,6 +396,16 @@ button:focus-visible {
   overflow-wrap: anywhere;
 }
 
+.preview-signature {
+  position: absolute;
+  left: 11%;
+  right: 11%;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  line-height: 1.4;
+  letter-spacing: .04em;
+}
+
 .preview-content h2 {
   margin: 0 0 .55em;
   line-height: 1.22;
@@ -453,6 +466,7 @@ button:focus-visible {
   .content-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .content-fields legend { grid-column: 1 / -1; }
   .content-fields .field-control + .field-control { margin-top: 0; }
+  .content-fields .signature-field { grid-column: 1 / -1; }
 }
 
 @media (max-width: 560px) {

@@ -9,7 +9,7 @@ import { usePersistedEditorState } from './hooks/usePersistedEditorState'
 export default function App() {
   const { state, update } = usePersistedEditorState()
   const previewRef = useRef<HTMLDivElement>(null)
-  const isEmpty = !state.title.trim() && !state.body.trim()
+  const isEmpty = !state.title.trim() && !state.body.trim() && !state.signature.trim()
   const size = SIZE_BY_ID.get(state.sizeId)!
 
   const handleExport = async () => {

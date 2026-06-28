@@ -77,6 +77,21 @@ export const PreviewCanvas = forwardRef<HTMLDivElement, PreviewCanvasProps>(func
               </p>
             ) : null}
           </div>
+          {state.signature ? (
+            <div
+              className="preview-signature"
+              data-testid="preview-signature"
+              style={{
+                bottom: '6%',
+                color: state.bodyStyle.color,
+                fontFamily: `'${bodyFont.family}', ${bodyFont.fallback}`,
+                fontSize: Math.max(14, state.bodyStyle.fontSize * 0.72),
+                fontWeight: state.bodyStyle.fontWeight,
+              }}
+            >
+              {state.signature}
+            </div>
+          ) : null}
         </div>
       </div>
       <div className="preview-meta" aria-hidden="true">

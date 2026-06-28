@@ -49,5 +49,26 @@ it('disables export when both text fields are empty', async () => {
   await user.clear(screen.getByLabelText('正文内容'))
 
   expect(screen.getByRole('button', { name: '下载 PNG' })).toBeDisabled()
-  expect(screen.getByText('请输入标题或正文')).toBeInTheDocument()
+  expect(screen.getByText('请输入文字内容')).toBeInTheDocument()
+})
+
+it('renders a signature at a fixed position near the canvas bottom', async () => {
+  const user = userEvent.setup()
+  render(<App />)
+
+  await user.type(screen.getByLabelText('署名文字'), '摄影 / 林野')
+
+  expect(screen.getByTestId('preview-signature')).toHaveTextContent('摄影 / 林野')
+  expect(screen.getByTestId('preview-signature')).toHaveStyle({ bottom: '6%' })
+})
+
+it('allows export when only the signature has content', async () => {
+  const user = userEvent.setup()
+  render(<App />)
+
+  await user.clear(screen.getByLabelText('标题内容'))
+  await user.clear(screen.getByLabelText('正文内容'))
+  await user.type(screen.getByLabelText('署名文字'), '摄影 / 林野')
+
+  expect(screen.getByRole('button', { name: '下载 PNG' })).toBeEnabled()
 })

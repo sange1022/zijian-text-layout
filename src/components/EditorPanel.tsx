@@ -31,6 +31,16 @@ export function EditorPanel({ state, onChange }: EditorPanelProps) {
             onChange={(event) => onChange({ body: event.target.value })}
           />
         </label>
+        <label className="field-control signature-field">
+          <span>署名</span>
+          <input
+            aria-label="署名文字"
+            type="text"
+            placeholder="例如：摄影 / 林野"
+            value={state.signature}
+            onChange={(event) => onChange({ signature: event.target.value })}
+          />
+        </label>
       </fieldset>
 
       <TextStyleControls
