@@ -106,7 +106,7 @@ Expected: FAIL because preset and parser modules do not exist.
 - [ ] **Step 3: Define state and presets**
 
 ```ts
-export type TextStyle = { fontId: string; fontSize: number; fontWeight: number; lineHeight: number; color: string }
+export type TextStyle = { fontId: string; fontSize: number; fontWeight: number; color: string }
 export type EditorState = { title: string; body: string; titleStyle: TextStyle; bodyStyle: TextStyle; backgroundColor: string; sizeId: string }
 export type SizePreset = { id: string; label: string; detail: string; width: number; height: number }
 export type FontPreset = { id: string; label: string; family: string; fallback: string; usage: '标题' | '正文' | '通用' }
@@ -166,7 +166,7 @@ Expected: FAIL because editor controls and preview do not exist.
 
 - [ ] **Step 3: Implement accessible controls**
 
-`EditorPanel` renders labeled title/body textareas, two `TextStyleControls`, `SizePresets`, and `ColorField` for background. `TextStyleControls` renders font, size, weight, line-height and color controls. Number inputs clamp to safe ranges; color text values update state only when matching `^#[0-9A-Fa-f]{6}$`.
+`EditorPanel` renders labeled title/body textareas, two `TextStyleControls`, `SizePresets`, and `ColorField` for background. `TextStyleControls` renders font, size, weight and color controls. Number inputs clamp to safe ranges; color text values update state only when matching `^#[0-9A-Fa-f]{6}$`. Font choices are limited to Source Han Serif, Source Han Sans, and Smiley Sans.
 
 - [ ] **Step 4: Implement the scaled preview**
 
@@ -274,7 +274,7 @@ Run: `npm run dev -- --host 127.0.0.1`
 Verify in the in-app browser at desktop and mobile widths:
 
 1. Change both text fields and confirm instant preview.
-2. Change title/body fonts, sizes, weights, line heights and colors independently.
+2. Change title/body fonts, sizes, weights and colors independently.
 3. Select each of the five sizes and confirm aspect ratio changes without losing text.
 4. Refresh and confirm state restoration.
 5. Export a PNG and inspect its exact pixel dimensions and visual match.
