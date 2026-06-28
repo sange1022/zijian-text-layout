@@ -1,14 +1,21 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
-import { expect, it } from 'vitest'
+import { expect, it, vi } from 'vitest'
 import App from './App'
+
+vi.mock('./background/prepareBackgroundImage', () => ({
+  prepareBackgroundImage: vi.fn(async (file: File) => ({
+    url: 'blob:poster',
+    name: file.name,
+  })),
+}))
 
 it('renders the simple editor workspace', () => {
   render(<App />)
   expect(screen.getByRole('heading', { name: '字间' })).toBeInTheDocument()
   expect(screen.getByRole('main')).toBeInTheDocument()
   expect(screen.getByRole('button', { name: '下载 PNG' })).toBeInTheDocument()
-  expect(screen.getAllByRole('option', { name: /思源|得意/ })).toHaveLength(6)
+  expect(screen.getAllByRole('option', { name: /思源|得意|汇文/ })).toHaveLength(12)
 })
 
 it('updates the preview text and size immediately', async () => {
@@ -79,4 +86,47 @@ it('allows export when only the signature has content', async () => {
   await user.type(screen.getByLabelText('署名文字'), '摄影 / 林野')
 
   expect(screen.getByRole('button', { name: '下载 PNG' })).toBeEnabled()
+})
+
+it('keeps the signature font independent from the body font', async () => {
+  const user = userEvent.setup()
+  render(<App />)
+
+  await user.type(screen.getByLabelText('署名文字'), '摄影 / 林野')
+  await user.selectOptions(screen.getByLabelText('署名字体'), 'huiwen-mincho')
+  await user.selectOptions(screen.getByLabelText('正文字体'), 'source-serif')
+
+  expect(screen.getByTestId('preview-signature').getAttribute('style')).toContain('Huiwen Mincho')
+  expect(screen.getByTestId('preview-body').getAttribute('style')).toContain('Noto Serif SC')
+})
+
+it('keeps a selected signature anchor when the body becomes multiline', async () => {
+  const user = userEvent.setup()
+  render(<App />)
+
+  await user.type(screen.getByLabelText('署名文字'), '摄影 / 林野')
+  await user.click(screen.getByRole('button', { name: '右上' }))
+  await user.clear(screen.getByLabelText('正文内容'))
+  await user.type(screen.getByLabelText('正文内容'), '第一行{enter}第二行{enter}第三行')
+
+  expect(screen.getByTestId('preview-signature')).toHaveStyle({
+    top: '6%',
+    textAlign: 'right',
+  })
+})
+
+it('uploads, keeps, and removes a cover background image', async () => {
+  const user = userEvent.setup()
+  render(<App />)
+  const file = new File(['image'], 'poster.jpg', { type: 'image/jpeg' })
+
+  await user.upload(screen.getByLabelText('上传背景图'), file)
+  expect(screen.getByTestId('preview-background-image')).toHaveAttribute('src', 'blob:poster')
+  expect(screen.getByTestId('preview-background-image')).toHaveClass('preview-background-image')
+
+  await user.click(screen.getByRole('button', { name: /方图 1:1/ }))
+  expect(screen.getByTestId('preview-background-image')).toHaveAttribute('src', 'blob:poster')
+
+  await user.click(screen.getByRole('button', { name: '移除背景图' }))
+  expect(screen.queryByTestId('preview-background-image')).not.toBeInTheDocument()
 })

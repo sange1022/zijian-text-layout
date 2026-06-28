@@ -5,9 +5,11 @@ import { PreviewCanvas } from './components/PreviewCanvas'
 import { SIZE_BY_ID } from './data/presets'
 import { exportPng } from './export/exportPng'
 import { usePersistedEditorState } from './hooks/usePersistedEditorState'
+import { useSessionBackgroundImage } from './hooks/useSessionBackgroundImage'
 
 export default function App() {
   const { state, update } = usePersistedEditorState()
+  const { backgroundImage, setBackgroundImage } = useSessionBackgroundImage()
   const previewRef = useRef<HTMLDivElement>(null)
   const isEmpty = !state.title.trim() && !state.body.trim() && !state.signature.trim()
   const size = SIZE_BY_ID.get(state.sizeId)!
@@ -28,8 +30,13 @@ export default function App() {
         <ExportButton isEmpty={isEmpty} onExport={handleExport} />
       </header>
       <main className="workspace">
-        <EditorPanel state={state} onChange={update} />
-        <PreviewCanvas ref={previewRef} state={state} />
+        <EditorPanel
+          state={state}
+          backgroundImage={backgroundImage}
+          onChange={update}
+          onBackgroundImageChange={setBackgroundImage}
+        />
+        <PreviewCanvas ref={previewRef} state={state} backgroundImage={backgroundImage} />
       </main>
     </div>
   )

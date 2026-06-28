@@ -1,9 +1,10 @@
 import { forwardRef, useEffect, useRef, useState, type CSSProperties } from 'react'
 import { FONT_BY_ID, SIZE_BY_ID } from '../data/presets'
-import type { EditorState, SignaturePosition } from '../types'
+import type { BackgroundImageValue, EditorState, SignaturePosition } from '../types'
 
 type PreviewCanvasProps = {
   state: EditorState
+  backgroundImage: BackgroundImageValue | null
 }
 
 function getSignaturePositionStyle(position: SignaturePosition): CSSProperties {
@@ -22,7 +23,7 @@ function getSignaturePositionStyle(position: SignaturePosition): CSSProperties {
 }
 
 export const PreviewCanvas = forwardRef<HTMLDivElement, PreviewCanvasProps>(function PreviewCanvas(
-  { state },
+  { state, backgroundImage },
   forwardedRef,
 ) {
   const stageRef = useRef<HTMLDivElement>(null)
@@ -30,6 +31,7 @@ export const PreviewCanvas = forwardRef<HTMLDivElement, PreviewCanvasProps>(func
   const size = SIZE_BY_ID.get(state.sizeId)!
   const titleFont = FONT_BY_ID.get(state.titleStyle.fontId)!
   const bodyFont = FONT_BY_ID.get(state.bodyStyle.fontId)!
+  const signatureFont = FONT_BY_ID.get(state.signatureFontId)!
 
   useEffect(() => {
     const stage = stageRef.current
@@ -64,6 +66,15 @@ export const PreviewCanvas = forwardRef<HTMLDivElement, PreviewCanvasProps>(func
             transform: `scale(${scale})`,
           }}
         >
+          {backgroundImage ? (
+            <img
+              className="preview-background-image"
+              data-testid="preview-background-image"
+              src={backgroundImage.url}
+              alt=""
+              aria-hidden="true"
+            />
+          ) : null}
           <div className="preview-content">
             {state.title ? (
               <h2
@@ -99,7 +110,7 @@ export const PreviewCanvas = forwardRef<HTMLDivElement, PreviewCanvasProps>(func
               style={{
                 ...getSignaturePositionStyle(state.signaturePosition),
                 color: state.bodyStyle.color,
-                fontFamily: `'${bodyFont.family}', ${bodyFont.fallback}`,
+                fontFamily: `'${signatureFont.family}', ${signatureFont.fallback}`,
                 fontSize: Math.max(14, state.bodyStyle.fontSize * 0.72),
                 fontWeight: state.bodyStyle.fontWeight,
               }}

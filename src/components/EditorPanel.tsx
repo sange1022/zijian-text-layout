@@ -1,4 +1,6 @@
-import type { EditorState } from '../types'
+import { FONT_PRESETS } from '../data/presets'
+import type { BackgroundImageValue, EditorState } from '../types'
+import { BackgroundImageField } from './BackgroundImageField'
 import { ColorField } from './ColorField'
 import { SignaturePositionPicker } from './SignaturePositionPicker'
 import { SizePresets } from './SizePresets'
@@ -6,10 +8,17 @@ import { TextStyleControls } from './TextStyleControls'
 
 type EditorPanelProps = {
   state: EditorState
+  backgroundImage: BackgroundImageValue | null
   onChange: (patch: Partial<EditorState>) => void
+  onBackgroundImageChange: (value: BackgroundImageValue | null) => void
 }
 
-export function EditorPanel({ state, onChange }: EditorPanelProps) {
+export function EditorPanel({
+  state,
+  backgroundImage,
+  onChange,
+  onBackgroundImageChange,
+}: EditorPanelProps) {
   return (
     <aside className="editor-panel" aria-label="排版设置">
       <fieldset className="settings-section content-fields">
@@ -43,6 +52,20 @@ export function EditorPanel({ state, onChange }: EditorPanelProps) {
               onChange={(event) => onChange({ signature: event.target.value })}
             />
           </label>
+          <label className="field-control signature-font-field">
+            <span>字体</span>
+            <select
+              aria-label="署名字体"
+              value={state.signatureFontId}
+              onChange={(event) => onChange({ signatureFontId: event.target.value })}
+            >
+              {FONT_PRESETS.map((font) => (
+                <option key={font.id} value={font.id}>
+                  {font.label}
+                </option>
+              ))}
+            </select>
+          </label>
           <SignaturePositionPicker
             value={state.signaturePosition}
             onChange={(signaturePosition) => onChange({ signaturePosition })}
@@ -61,14 +84,20 @@ export function EditorPanel({ state, onChange }: EditorPanelProps) {
         onChange={(bodyStyle) => onChange({ bodyStyle })}
       />
       <SizePresets value={state.sizeId} onChange={(sizeId) => onChange({ sizeId })} />
-      <fieldset className="settings-section background-section">
-        <legend>画布背景</legend>
+      <section className="settings-section background-section" aria-label="画布背景">
+        <div className="settings-heading">
+          <span>画布背景</span>
+          <BackgroundImageField
+            value={backgroundImage}
+            onChange={onBackgroundImageChange}
+          />
+        </div>
         <ColorField
           label="背景颜色"
           value={state.backgroundColor}
           onChange={(backgroundColor) => onChange({ backgroundColor })}
         />
-      </fieldset>
+      </section>
     </aside>
   )
 }

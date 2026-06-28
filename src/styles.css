@@ -82,7 +82,8 @@ button { color: inherit; }
   border-bottom: 1px solid var(--soft-line);
 }
 
-.settings-section legend {
+.settings-section legend,
+.settings-heading {
   width: 100%;
   margin: 0 0 8px;
   padding: 0;
@@ -91,6 +92,14 @@ button { color: inherit; }
   line-height: 1;
   font-weight: 700;
   letter-spacing: .12em;
+}
+
+.settings-heading {
+  min-height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
 }
 
 .field-control {
@@ -366,9 +375,9 @@ button:focus-visible {
 
 .signature-row {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 126px;
+  grid-template-columns: minmax(0, 1fr) 88px 82px;
   align-items: end;
-  gap: 10px;
+  gap: 6px;
   margin-top: 8px;
 }
 
@@ -412,7 +421,78 @@ button:focus-visible {
 .position-mark--bottom-center { bottom: 3px; left: 50%; transform: translateX(-50%); }
 .position-mark--bottom-right { right: 4px; bottom: 3px; }
 
-.background-section { border-bottom: 0; }
+.background-image-field {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+  color: #686868;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.background-image-upload {
+  flex: none;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 8px;
+  border: 1px solid #d8d8d8;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.background-image-upload:hover { border-color: #8c8c8c; }
+.background-image-upload:focus-within {
+  border-color: var(--focus);
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, .09);
+}
+
+.background-image-upload input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.background-image-name {
+  max-width: 70px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.background-image-remove {
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: 0;
+  border-radius: 5px;
+  background: #f0f0f0;
+  color: #555;
+  cursor: pointer;
+}
+
+.background-image-error {
+  position: absolute;
+  top: 31px;
+  right: 0;
+  z-index: 2;
+  padding: 4px 6px;
+  border-radius: 5px;
+  background: #fff0ee;
+  color: #a33b34;
+  white-space: nowrap;
+}
+
+.background-section { position: relative; border-bottom: 0; }
 
 .preview-stage {
   position: relative;
@@ -438,7 +518,18 @@ button:focus-visible {
   transform-origin: top left;
 }
 
+.preview-background-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
 .preview-content {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   display: flex;
@@ -463,6 +554,7 @@ button:focus-visible {
   overflow-wrap: anywhere;
   line-height: 1.4;
   letter-spacing: .04em;
+  z-index: 1;
 }
 
 .preview-content h2 {
