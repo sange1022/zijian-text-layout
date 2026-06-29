@@ -82,6 +82,26 @@ describe('parseStoredState', () => {
     expect(parseStoredState(JSON.stringify(saved))).toEqual(saved)
   })
 
+  it('migrates a legacy signature size from the saved body size', () => {
+    const legacy = { ...DEFAULT_EDITOR_STATE } as Record<string, unknown>
+    delete legacy.signatureFontSize
+    legacy.bodyStyle = { ...DEFAULT_EDITOR_STATE.bodyStyle, fontSize: 40 }
+
+    expect(parseStoredState(JSON.stringify(legacy))).toMatchObject({
+      signatureFontSize: 29,
+    })
+  })
+
+  it('restores an independent signature size', () => {
+    const saved = { ...DEFAULT_EDITOR_STATE, signatureFontSize: 36 }
+    expect(parseStoredState(JSON.stringify(saved))).toEqual(saved)
+  })
+
+  it('clamps a saved signature size to the slider range', () => {
+    const saved = { ...DEFAULT_EDITOR_STATE, signatureFontSize: 90 }
+    expect(parseStoredState(JSON.stringify(saved))).toMatchObject({ signatureFontSize: 64 })
+  })
+
   it('rejects an unknown signature font', () => {
     const saved = { ...DEFAULT_EDITOR_STATE, signatureFontId: 'unknown-font' }
     expect(parseStoredState(JSON.stringify(saved))).toEqual(DEFAULT_EDITOR_STATE)

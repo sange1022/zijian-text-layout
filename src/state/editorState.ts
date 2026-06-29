@@ -9,6 +9,7 @@ export const DEFAULT_EDITOR_STATE: EditorState = {
   signature: '',
   signaturePosition: 'bottom-left',
   signatureFontId: 'source-sans',
+  signatureFontSize: 20,
   titleStyle: {
     fontId: 'source-serif',
     fontSize: 64,
@@ -70,6 +71,10 @@ function isEditorState(value: unknown): value is EditorState {
     isSignaturePosition(state.signaturePosition) &&
     typeof state.signatureFontId === 'string' &&
     FONT_BY_ID.has(state.signatureFontId) &&
+    typeof state.signatureFontSize === 'number' &&
+    Number.isFinite(state.signatureFontSize) &&
+    state.signatureFontSize >= 12 &&
+    state.signatureFontSize <= 240 &&
     isTextStyle(state.titleStyle) &&
     isTextStyle(state.bodyStyle) &&
     typeof state.backgroundColor === 'string' &&
@@ -83,6 +88,17 @@ export function parseStoredState(raw: string | null): EditorState {
   if (!raw) return DEFAULT_EDITOR_STATE
   try {
     const value: unknown = JSON.parse(raw)
+    const legacyBodyFontSize =
+      value &&
+      typeof value === 'object' &&
+      'bodyStyle' in value &&
+      value.bodyStyle &&
+      typeof value.bodyStyle === 'object' &&
+      'fontSize' in value.bodyStyle &&
+      typeof value.bodyStyle.fontSize === 'number' &&
+      Number.isFinite(value.bodyStyle.fontSize)
+        ? clamp(value.bodyStyle.fontSize, 12, 80)
+        : DEFAULT_EDITOR_STATE.bodyStyle.fontSize
     const candidate =
       value && typeof value === 'object'
         ? {
@@ -99,6 +115,13 @@ export function parseStoredState(raw: string | null): EditorState {
               typeof value.bodyStyle.fontId === 'string'
               ? { signatureFontId: value.bodyStyle.fontId }
               : {}),
+            ...(!('signatureFontSize' in value)
+              ? {
+                  signatureFontSize: Math.round(
+                    Math.max(14, legacyBodyFontSize * 0.72),
+                  ),
+                }
+              : {}),
           }
         : value
     if (!isEditorState(candidate)) return DEFAULT_EDITOR_STATE
@@ -112,6 +135,7 @@ export function parseStoredState(raw: string | null): EditorState {
         ...candidate.bodyStyle,
         fontSize: clamp(candidate.bodyStyle.fontSize, 12, 80),
       },
+      signatureFontSize: clamp(candidate.signatureFontSize, 12, 64),
     }
   } catch {
     return DEFAULT_EDITOR_STATE
