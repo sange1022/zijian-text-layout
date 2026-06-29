@@ -137,13 +137,25 @@ it('uploads, keeps, and removes a cover background image', async () => {
   render(<App />)
   const file = new File(['image'], 'poster.jpg', { type: 'image/jpeg' })
 
+  expect(screen.queryByRole('slider', { name: '背景图左右位置' })).not.toBeInTheDocument()
   await user.upload(screen.getByLabelText('上传背景图'), file)
   expect(screen.getByTestId('preview-background-image')).toHaveAttribute('src', 'blob:poster')
   expect(screen.getByTestId('preview-background-image')).toHaveClass('preview-background-image')
+
+  fireEvent.change(screen.getByRole('slider', { name: '背景图左右位置' }), {
+    target: { value: '20' },
+  })
+  fireEvent.change(screen.getByRole('slider', { name: '背景图上下位置' }), {
+    target: { value: '75' },
+  })
+  expect(screen.getByTestId('preview-background-image')).toHaveStyle({
+    objectPosition: '20% 75%',
+  })
 
   await user.click(screen.getByRole('button', { name: /方图 1:1/ }))
   expect(screen.getByTestId('preview-background-image')).toHaveAttribute('src', 'blob:poster')
 
   await user.click(screen.getByRole('button', { name: '移除背景图' }))
   expect(screen.queryByTestId('preview-background-image')).not.toBeInTheDocument()
+  expect(screen.queryByRole('slider', { name: '背景图左右位置' })).not.toBeInTheDocument()
 })

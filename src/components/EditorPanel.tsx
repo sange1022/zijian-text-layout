@@ -1,6 +1,7 @@
 import { FONT_PRESETS } from '../data/presets'
 import type { BackgroundImageValue, EditorState } from '../types'
 import { BackgroundImageField } from './BackgroundImageField'
+import { BackgroundPositionControls } from './BackgroundPositionControls'
 import { ColorField } from './ColorField'
 import { FontSizeSlider } from './FontSizeSlider'
 import { SignaturePositionPicker } from './SignaturePositionPicker'
@@ -102,6 +103,19 @@ export function EditorPanel({
             onChange={onBackgroundImageChange}
           />
         </div>
+        {backgroundImage ? (
+          <BackgroundPositionControls
+            positionX={backgroundImage.positionX}
+            positionY={backgroundImage.positionY}
+            onChange={(positionX, positionY) =>
+              onBackgroundImageChange({
+                ...backgroundImage,
+                positionX,
+                positionY,
+              })
+            }
+          />
+        ) : null}
         <ColorField
           label="背景颜色"
           value={state.backgroundColor}

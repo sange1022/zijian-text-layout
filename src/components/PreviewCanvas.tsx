@@ -71,6 +71,9 @@ export const PreviewCanvas = forwardRef<HTMLDivElement, PreviewCanvasProps>(func
               className="preview-background-image"
               data-testid="preview-background-image"
               src={backgroundImage.url}
+              style={{
+                objectPosition: `${backgroundImage.positionX}% ${backgroundImage.positionY}%`,
+              }}
               alt=""
               aria-hidden="true"
             />
