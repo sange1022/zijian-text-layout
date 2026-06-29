@@ -10,7 +10,10 @@
 
 @font-face {
   font-family: 'Huiwen Mincho';
-  src: local('Huiwen-mincho'), local('汇文明朝体');
+  src:
+    local('Huiwen-mincho'),
+    local('汇文明朝体'),
+    url('/fonts/huiwen-mincho.woff2') format('woff2');
   font-display: swap;
   font-style: normal;
   font-weight: 400;
