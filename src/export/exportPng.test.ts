@@ -14,7 +14,12 @@ it('renders and downloads a PNG at the exact requested size', async () => {
 
   expect(render).toHaveBeenCalledWith(
     node,
-    expect.objectContaining({ width: 1080, height: 1080, pixelRatio: 1 }),
+    expect.objectContaining({
+      width: 1080,
+      height: 1080,
+      pixelRatio: 1,
+      cacheBust: false,
+    }),
   )
   expect(download).toHaveBeenCalledWith(
     'data:image/png;base64,abc',

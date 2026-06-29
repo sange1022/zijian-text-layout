@@ -48,7 +48,7 @@ export async function exportPng(
     canvasWidth: options.width,
     canvasHeight: options.height,
     pixelRatio: 1,
-    cacheBust: true,
+    cacheBust: false,
     skipAutoScale: true,
     style: {
       width: `${options.width}px`,
