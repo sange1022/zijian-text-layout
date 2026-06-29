@@ -2,6 +2,7 @@ import { FONT_PRESETS } from '../data/presets'
 import type { BackgroundImageValue, EditorState } from '../types'
 import { BackgroundImageField } from './BackgroundImageField'
 import { ColorField } from './ColorField'
+import { FontSizeSlider } from './FontSizeSlider'
 import { SignaturePositionPicker } from './SignaturePositionPicker'
 import { SizePresets } from './SizePresets'
 import { TextStyleControls } from './TextStyleControls'
@@ -36,7 +37,7 @@ export function EditorPanel({
           <span>正文</span>
           <textarea
             aria-label="正文内容"
-            rows={3}
+            rows={2}
             value={state.body}
             onChange={(event) => onChange({ body: event.target.value })}
           />
@@ -69,6 +70,15 @@ export function EditorPanel({
           <SignaturePositionPicker
             value={state.signaturePosition}
             onChange={(signaturePosition) => onChange({ signaturePosition })}
+          />
+        </div>
+        <div className="signature-size-control">
+          <FontSizeSlider
+            label="署名字号"
+            value={state.signatureFontSize}
+            min={12}
+            max={64}
+            onChange={(signatureFontSize) => onChange({ signatureFontSize })}
           />
         </div>
       </fieldset>

@@ -100,6 +100,21 @@ it('keeps the signature font independent from the body font', async () => {
   expect(screen.getByTestId('preview-body').getAttribute('style')).toContain('Noto Serif SC')
 })
 
+it('controls signature size independently from body size', async () => {
+  const user = userEvent.setup()
+  render(<App />)
+
+  await user.type(screen.getByLabelText('署名文字'), '摄影 / 林野')
+  fireEvent.change(screen.getByRole('slider', { name: '署名字号' }), {
+    target: { value: '42' },
+  })
+  fireEvent.change(screen.getByRole('slider', { name: '正文字号' }), {
+    target: { value: '64' },
+  })
+
+  expect(screen.getByTestId('preview-signature')).toHaveStyle({ fontSize: '42px' })
+})
+
 it('keeps a selected signature anchor when the body becomes multiline', async () => {
   const user = userEvent.setup()
   render(<App />)

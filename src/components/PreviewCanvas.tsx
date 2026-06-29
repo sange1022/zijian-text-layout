@@ -111,7 +111,7 @@ export const PreviewCanvas = forwardRef<HTMLDivElement, PreviewCanvasProps>(func
                 ...getSignaturePositionStyle(state.signaturePosition),
                 color: state.bodyStyle.color,
                 fontFamily: `'${signatureFont.family}', ${signatureFont.fallback}`,
-                fontSize: Math.max(14, state.bodyStyle.fontSize * 0.72),
+                fontSize: state.signatureFontSize,
                 fontWeight: state.bodyStyle.fontWeight,
               }}
             >
