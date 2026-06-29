@@ -15,6 +15,8 @@ describe('prepareBackgroundImage', () => {
     await expect(prepareBackgroundImage(file, deps)).resolves.toEqual({
       url: 'blob:poster',
       name: '海报.jpg',
+      positionX: 50,
+      positionY: 50,
     })
     expect(deps.decode).toHaveBeenCalledWith('blob:poster')
   })

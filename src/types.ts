@@ -45,4 +45,6 @@ export type FontPreset = {
 export type BackgroundImageValue = {
   url: string
   name: string
+  positionX: number
+  positionY: number
 }

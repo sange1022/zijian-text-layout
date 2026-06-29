@@ -7,6 +7,8 @@ vi.mock('./background/prepareBackgroundImage', () => ({
   prepareBackgroundImage: vi.fn(async (file: File) => ({
     url: 'blob:poster',
     name: file.name,
+    positionX: 50,
+    positionY: 50,
   })),
 }))
 

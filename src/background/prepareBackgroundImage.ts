@@ -39,7 +39,7 @@ export async function prepareBackgroundImage(
   const url = dependencies.createObjectURL(file)
   try {
     await dependencies.decode(url)
-    return { url, name: file.name }
+    return { url, name: file.name, positionX: 50, positionY: 50 }
   } catch {
     dependencies.revokeObjectURL(url)
     throw new Error('图片无法读取，请更换文件')

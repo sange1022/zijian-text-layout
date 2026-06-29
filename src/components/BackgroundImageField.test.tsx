@@ -5,7 +5,13 @@ import { BackgroundImageField } from './BackgroundImageField'
 
 it('uploads and removes a valid background image', async () => {
   const user = userEvent.setup()
-  const prepare = vi.fn().mockResolvedValue({ url: 'blob:poster', name: 'poster.jpg' })
+  const preparedImage = {
+    url: 'blob:poster',
+    name: 'poster.jpg',
+    positionX: 50,
+    positionY: 50,
+  }
+  const prepare = vi.fn().mockResolvedValue(preparedImage)
   const onChange = vi.fn()
   const { rerender } = render(
     <BackgroundImageField value={null} onChange={onChange} prepare={prepare} />,
@@ -14,11 +20,11 @@ it('uploads and removes a valid background image', async () => {
 
   await user.upload(screen.getByLabelText('上传背景图'), file)
   expect(prepare).toHaveBeenCalledWith(file)
-  expect(onChange).toHaveBeenCalledWith({ url: 'blob:poster', name: 'poster.jpg' })
+  expect(onChange).toHaveBeenCalledWith(preparedImage)
 
   rerender(
     <BackgroundImageField
-      value={{ url: 'blob:poster', name: 'poster.jpg' }}
+      value={preparedImage}
       onChange={onChange}
       prepare={prepare}
     />,
@@ -35,7 +41,12 @@ it('shows an upload error without replacing the current image', async () => {
   const onChange = vi.fn()
   render(
     <BackgroundImageField
-      value={{ url: 'blob:current', name: 'current.jpg' }}
+      value={{
+        url: 'blob:current',
+        name: 'current.jpg',
+        positionX: 50,
+        positionY: 50,
+      }}
       onChange={onChange}
       prepare={prepare}
     />,
