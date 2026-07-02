@@ -2,7 +2,12 @@ import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
 export default defineConfig(({ mode }) => ({
-  base: mode === 'pages' ? '/zijian-text-layout/' : '/',
+  base:
+    mode === 'pages'
+      ? '/zijian-text-layout/'
+      : mode === 'desktop'
+        ? './'
+        : '/',
   plugins: [react()],
   test: {
     environment: 'jsdom',

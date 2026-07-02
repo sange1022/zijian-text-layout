@@ -14,7 +14,7 @@
 
 - Create `electron/main.cjs`: Electron application lifecycle and local frontend loading.
 - Create `electron/window-options.cjs`: focused, testable window/security configuration.
-- Create `electron/desktop-config.test.cjs`: package, window, and workflow contract tests.
+- Create `electron/desktop-config.node.cjs`: package, window, and workflow contract tests kept outside Vitest's file glob.
 - Modify `vite.config.ts`: relative asset base for desktop mode.
 - Modify `package.json` and `package-lock.json`: desktop entry, scripts, dependencies, version, and builder targets.
 - Create `.github/workflows/build-windows.yml`: native Windows build and artifact upload.
@@ -23,7 +23,7 @@
 ### Task 1: Define the desktop packaging contract with a failing test
 
 **Files:**
-- Create: `electron/desktop-config.test.cjs`
+- Create: `electron/desktop-config.node.cjs`
 
 - [ ] **Step 1: Write the failing configuration test**
 
@@ -49,14 +49,14 @@ Read `electron/window-options.cjs` as text only after confirming it exists, and 
 
 - [ ] **Step 2: Run the test and verify RED**
 
-Run: `node --test electron/desktop-config.test.cjs`
+Run: `node --test electron/desktop-config.node.cjs`
 
 Expected: FAIL because the project is still version 0.1.0 and has no Electron entry or Windows workflow.
 
 - [ ] **Step 3: Commit the failing test**
 
 ```bash
-git add electron/desktop-config.test.cjs
+git add electron/desktop-config.node.cjs
 git commit -m "test: define Windows desktop packaging contract"
 ```
 
@@ -125,7 +125,7 @@ Set package version `0.2.0`, `main: electron/main.cjs`, and scripts:
 ```json
 "build:desktop": "tsc -b && vite build --mode desktop",
 "package:win": "npm run build:desktop && electron-builder --win nsis portable --x64",
-"test:desktop": "node --test electron/desktop-config.test.cjs"
+"test:desktop": "node --test electron/desktop-config.node.cjs"
 ```
 
 Add electron-builder configuration with output `release`, files `dist/**/*`, `electron/**/*`, and `package.json`, Windows targets `nsis` and `portable`, NSIS artifact `zijian-text-layout-Setup-${version}-${arch}.${ext}`, and portable artifact `zijian-text-layout-Portable-${version}-${arch}.${ext}`.
@@ -149,7 +149,7 @@ Expected: build succeeds and both built CSS and JS references begin with `./asse
 
 **Files:**
 - Create: `.github/workflows/build-windows.yml`
-- Test: `electron/desktop-config.test.cjs`
+- Test: `electron/desktop-config.node.cjs`
 
 - [ ] **Step 1: Add the Windows workflow**
 
